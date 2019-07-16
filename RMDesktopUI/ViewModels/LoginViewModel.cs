@@ -1,5 +1,4 @@
-﻿using System;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 
 namespace RMDesktopUI.ViewModels
 {
@@ -16,7 +15,6 @@ namespace RMDesktopUI.ViewModels
 				_userName = value;
 				NotifyOfPropertyChange(Username);
 				NotifyOfPropertyChange(() => CanLogIn);
-
 			}
 		}
 
@@ -44,9 +42,6 @@ namespace RMDesktopUI.ViewModels
 			}
 		}
 
-		public void LogIn()
-		{
-
-		}
+		public void LogIn(){}
 	}
 }
