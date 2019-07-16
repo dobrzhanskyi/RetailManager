@@ -1,6 +1,8 @@
-﻿namespace RMDesktopUI.ViewModels
+﻿using Caliburn.Micro;
+
+namespace RMDesktopUI.ViewModels
 {
-	public class ShellViewModel
+	public class ShellViewModel:Conductor<object>
 	{
 	}
 }
