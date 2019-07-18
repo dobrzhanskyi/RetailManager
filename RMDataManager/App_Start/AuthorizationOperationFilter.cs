@@ -19,7 +19,7 @@ namespace RMDataManager.App_Start
 				@in = "header",
 				description = "access token",
 				required = false,
-				type = "sstring"
+				type = "string"
 			});
 		}
 	}
