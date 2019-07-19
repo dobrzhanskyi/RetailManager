@@ -7,36 +7,25 @@ namespace RMDesktopUI.ViewModels
 {
 	public class LoginViewModel : Screen
 	{
-		private string _userName;
+		#region Private Fields
+
+		private IAPIHelper _apiHelper;
+		private string _errorMessage;
 		private string _password;
-		private IAPIHelper _aPIHelper;
+		private string _userName;
+
+		#endregion Private Fields
+
+		#region Public Constructors
 
 		public LoginViewModel(IAPIHelper apiHelper)
 		{
-			_aPIHelper = apiHelper;
+			_apiHelper = apiHelper;
 		}
 
-		public string Username
-		{
-			get => _userName;
-			set
-			{
-				_userName = value;
-				NotifyOfPropertyChange(Username);
-				NotifyOfPropertyChange(() => CanLogIn);
-			}
-		}
+		#endregion Public Constructors
 
-		public string Password
-		{
-			get => _password;
-			set
-			{
-				_password = value;
-				NotifyOfPropertyChange(() => Password);
-				NotifyOfPropertyChange(() => CanLogIn);
-			}
-		}
+		#region Public Properties
 
 		public bool CanLogIn
 		{
@@ -51,16 +40,69 @@ namespace RMDesktopUI.ViewModels
 			}
 		}
 
+		public string ErrorMessage
+		{
+			get { return _errorMessage; }
+			set
+			{
+				_errorMessage = value;
+				NotifyOfPropertyChange(() => ErrorMessage);
+				NotifyOfPropertyChange(() => IsErrorVisible);
+			}
+		}
+
+		public bool IsErrorVisible
+		{
+			get
+			{
+				bool output = false;
+				if (ErrorMessage?.Length > 0)
+				{
+					output = true;
+				}
+				return output;
+			}
+		}
+
+		public string Password
+		{
+			get => _password;
+			set
+			{
+				_password = value;
+				NotifyOfPropertyChange(() => Password);
+				NotifyOfPropertyChange(() => CanLogIn);
+			}
+		}
+
+		public string Username
+		{
+			get => _userName;
+			set
+			{
+				_userName = value;
+				NotifyOfPropertyChange(Username);
+				NotifyOfPropertyChange(() => CanLogIn);
+			}
+		}
+
+		#endregion Public Properties
+
+		#region Public Methods
+
 		public async Task LogIn()
 		{
 			try
 			{
-				var result = await _aPIHelper.Authenticate(Username, Password);
+				ErrorMessage = "";
+				var result = await _apiHelper.Authenticate(Username, Password);
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
+				ErrorMessage = ex.Message;
 			}
 		}
+
+		#endregion Public Methods
 	}
 }
