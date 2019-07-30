@@ -4,14 +4,15 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Caliburn.Micro;
-using RMDesktopUI.Helpers;
+using RMDesktopUI.Library.Api;
+using RMDesktopUI.Library.Models;
 using RMDesktopUI.ViewModels;
 
 namespace RMDesktopUI
 {
 	public class Bootstrapper : BootstrapperBase
 	{
-		private SimpleContainer _container = new SimpleContainer();
+		private readonly SimpleContainer _container = new SimpleContainer();
 
 		public Bootstrapper()
 		{
@@ -28,6 +29,7 @@ namespace RMDesktopUI
 			_container
 				.Singleton<IWindowManager, WindowManager>()
 				.Singleton<IEventAggregator, EventAggregator>()
+				.Singleton<ILoggedInUserModel, LoggedInUserModel>()
 				.Singleton<IAPIHelper, APIHelper>();
 
 			GetType().Assembly.GetTypes()
