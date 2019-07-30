@@ -13,6 +13,7 @@ namespace RMDesktopUI.Library.Api
 	{
 		private HttpClient _apiClient;
 		private ILoggedInUserModel _loggedInUser;
+
 		public APIHelper(ILoggedInUserModel loggedUser)
 		{
 			InitializeClient();
@@ -54,7 +55,7 @@ namespace RMDesktopUI.Library.Api
 			}
 		}
 
-		public  async Task GetLoggedInUserInfo(string token) 
+		public async Task GetLoggedInUserInfo(string token)
 		{
 			_apiClient.DefaultRequestHeaders.Clear();
 			_apiClient.DefaultRequestHeaders.Accept.Clear();
@@ -65,7 +66,7 @@ namespace RMDesktopUI.Library.Api
 			{
 				if (response.IsSuccessStatusCode)
 				{
-					var result= await response.Content.ReadAsAsync<LoggedInUserModel>();
+					var result = await response.Content.ReadAsAsync<LoggedInUserModel>();
 					_loggedInUser.CreatedDate = result.CreatedDate;
 					_loggedInUser.EmailAdress = result.EmailAdress;
 					_loggedInUser.FirstName = result.FirstName;
@@ -77,7 +78,6 @@ namespace RMDesktopUI.Library.Api
 				{
 					throw new Exception(response.ReasonPhrase);
 				}
-				
 			}
 		}
 	}
