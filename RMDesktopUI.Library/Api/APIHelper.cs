@@ -12,7 +12,7 @@ namespace RMDesktopUI.Library.Api
 	public class APIHelper : IAPIHelper
 	{
 		private HttpClient _apiClient;
-		private ILoggedInUserModel _loggedInUser;
+		private readonly ILoggedInUserModel _loggedInUser;
 
 		public APIHelper(ILoggedInUserModel loggedUser)
 		{
