@@ -5,29 +5,15 @@ namespace RMDesktopUI.ViewModels
 {
 	public class SalesViewModel : Screen
 	{
-		private BindingList<string> _products;
-		private string _itemQuantity;
+		#region Private Fields
+
 		private BindingList<string> _cart;
+		private BindingList<string> _products;
+		private int _itemQuantity;
 
-		public BindingList<string> Products
-		{
-			get { return _products; }
-			set
-			{
-				_products = value;
-				NotifyOfPropertyChange(() => Products);
-			}
-		}
+		#endregion Private Fields
 
-		public string ItemQuantity
-		{
-			get { return _itemQuantity; }
-			set
-			{
-				_itemQuantity = value;
-				NotifyOfPropertyChange(() => ItemQuantity);
-			}
-		}
+		#region Public Properties
 
 		public bool CanAddToCart
 		{
@@ -36,6 +22,16 @@ namespace RMDesktopUI.ViewModels
 				bool output = false;
 				//TODO if something is selected
 				//TODO check item quantity
+				return output;
+			}
+		}
+
+		public bool CanCheckOut
+		{
+			get
+			{
+				bool output = false;
+				//TODO if something in the cart
 				return output;
 			}
 		}
@@ -60,13 +56,27 @@ namespace RMDesktopUI.ViewModels
 			}
 		}
 
-		public string SubTotal
+		public int ItemQuantity
 		{
-			//TODO Make calculation
-			get { return "$0.00"; }
+			get { return _itemQuantity; }
+			set
+			{
+				_itemQuantity = value;
+				NotifyOfPropertyChange(() => ItemQuantity);
+			}
 		}
 
-		public string Total
+		public BindingList<string> Products
+		{
+			get { return _products; }
+			set
+			{
+				_products = value;
+				NotifyOfPropertyChange(() => Products);
+			}
+		}
+
+		public string SubTotal
 		{
 			//TODO Make calculation
 			get { return "$0.00"; }
@@ -78,14 +88,18 @@ namespace RMDesktopUI.ViewModels
 			get { return "$0.00"; }
 		}
 
-		public bool CanCheckOut
+		public string Total
 		{
-			get
-			{
-				bool output = false;
-				//TODO if something in the cart
-				return output;
-			}
+			//TODO Make calculation
+			get { return "$0.00"; }
+		}
+
+		#endregion Public Properties
+
+		#region Public Methods
+
+		public void AddToCart()
+		{
 		}
 
 		public void CheckOut()
@@ -96,8 +110,6 @@ namespace RMDesktopUI.ViewModels
 		{
 		}
 
-		public void AddToCart()
-		{
-		}
+		#endregion Public Methods
 	}
 }

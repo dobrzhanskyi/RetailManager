@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Caliburn.Micro;
+using RMDesktopUI.EventModels;
 using RMDesktopUI.Library.Api;
 
 namespace RMDesktopUI.ViewModels
@@ -13,14 +15,16 @@ namespace RMDesktopUI.ViewModels
 		private string _errorMessage;
 		private string _password;
 		private string _userName;
+		private IEventAggregator _eventAggregator;
 
 		#endregion Private Fields
 
 		#region Public Constructors
 
-		public LoginViewModel(IAPIHelper apiHelper)
+		public LoginViewModel(IAPIHelper apiHelper,IEventAggregator eventAggregator)
 		{
 			_apiHelper = apiHelper;
+			_eventAggregator = eventAggregator;
 		}
 
 		#endregion Public Constructors
@@ -98,6 +102,8 @@ namespace RMDesktopUI.ViewModels
 				var result = await _apiHelper.Authenticate(Username, Password);
 				//Capture more user information
 				await _apiHelper.GetLoggedInUserInfo(result.Access_Token);
+
+				_eventAggregator.PublishOnUIThread(new LogOnEventModel());
 			}
 			catch (Exception ex)
 			{
