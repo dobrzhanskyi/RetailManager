@@ -11,8 +11,14 @@ namespace RMDesktopUI.Library.Api
 {
 	public class APIHelper : IAPIHelper
 	{
-		private HttpClient _apiClient;
+		#region Private Fields
+
 		private readonly ILoggedInUserModel _loggedInUser;
+		private HttpClient _apiClient;
+
+		#endregion Private Fields
+
+		#region Public Constructors
 
 		public APIHelper(ILoggedInUserModel loggedUser)
 		{
@@ -20,17 +26,21 @@ namespace RMDesktopUI.Library.Api
 			_loggedInUser = loggedUser;
 		}
 
-		private void InitializeClient()
-		{
-			string api = ConfigurationManager.AppSettings["api"];
+		#endregion Public Constructors
 
-			_apiClient = new HttpClient
+		#region Public Properties
+
+		public HttpClient ApiClient
+		{
+			get
 			{
-				BaseAddress = new System.Uri(api),
-			};
-			_apiClient.DefaultRequestHeaders.Accept.Clear();
-			_apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+				return _apiClient;
+			}
 		}
+
+		#endregion Public Properties
+
+		#region Public Methods
 
 		public async Task<AuthenticatedUser> Authenticate(string username, string password)
 		{
@@ -80,5 +90,23 @@ namespace RMDesktopUI.Library.Api
 				}
 			}
 		}
+
+		#endregion Public Methods
+
+		#region Private Methods
+
+		private void InitializeClient()
+		{
+			string api = ConfigurationManager.AppSettings["api"];
+
+			_apiClient = new HttpClient
+			{
+				BaseAddress = new System.Uri(api),
+			};
+			_apiClient.DefaultRequestHeaders.Accept.Clear();
+			_apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+		}
+
+		#endregion Private Methods
 	}
 }

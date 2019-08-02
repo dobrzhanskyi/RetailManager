@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel;
+using System.Threading.Tasks;
 using Caliburn.Micro;
+using RMDesktopUI.Library.Api;
+using RMDesktopUI.Library.Models;
 
 namespace RMDesktopUI.ViewModels
 {
@@ -7,11 +10,31 @@ namespace RMDesktopUI.ViewModels
 	{
 		#region Private Fields
 
+		private readonly IProductEndpoint _productEndpoint;
 		private BindingList<string> _cart;
-		private BindingList<string> _products;
 		private int _itemQuantity;
+		private BindingList<ProductModel> _products;
 
 		#endregion Private Fields
+
+		#region Public Constructors
+
+		public SalesViewModel(IProductEndpoint productEndpoint)
+		{
+			_productEndpoint = productEndpoint;
+		}
+
+		#endregion Public Constructors
+
+		#region Protected Methods
+
+		protected override async void OnViewLoaded(object view)
+		{
+			base.OnViewLoaded(view);
+			await LoadProducts();
+		}
+
+		#endregion Protected Methods
 
 		#region Public Properties
 
@@ -66,7 +89,7 @@ namespace RMDesktopUI.ViewModels
 			}
 		}
 
-		public BindingList<string> Products
+		public BindingList<ProductModel> Products
 		{
 			get { return _products; }
 			set
@@ -104,6 +127,12 @@ namespace RMDesktopUI.ViewModels
 
 		public void CheckOut()
 		{
+		}
+
+		public async Task LoadProducts()
+		{
+			var productList = await _productEndpoint.GetAll();
+			Products = new BindingList<ProductModel>(productList);
 		}
 
 		public void RemoveFromCart()
