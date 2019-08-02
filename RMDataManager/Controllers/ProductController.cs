@@ -9,8 +9,8 @@ using RMDataManager.Library.Models;
 
 namespace RMDataManager.Controllers
 {
-	//[Authorize]
-    public class ProductController : ApiController
+	[Authorize]
+	public class ProductController : ApiController
     {
 		public List<ProductModel> Get()
 		{
