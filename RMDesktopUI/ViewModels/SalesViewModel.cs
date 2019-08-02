@@ -14,8 +14,8 @@ namespace RMDesktopUI.ViewModels
 		private BindingList<string> _cart;
 		private int _itemQuantity;
 		private BindingList<ProductModel> _products;
-		#endregion Private Fields
 
+		#endregion Private Fields
 
 		#region Public Constructors
 
@@ -25,7 +25,6 @@ namespace RMDesktopUI.ViewModels
 		}
 
 		#endregion Public Constructors
-
 
 		#region Protected Methods
 
@@ -135,6 +134,7 @@ namespace RMDesktopUI.ViewModels
 			var productList = await _productEndpoint.GetAll();
 			Products = new BindingList<ProductModel>(productList);
 		}
+
 		public void RemoveFromCart()
 		{
 		}

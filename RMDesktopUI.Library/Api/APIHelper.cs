@@ -11,14 +11,12 @@ namespace RMDesktopUI.Library.Api
 {
 	public class APIHelper : IAPIHelper
 	{
-
 		#region Private Fields
 
 		private readonly ILoggedInUserModel _loggedInUser;
 		private HttpClient _apiClient;
 
 		#endregion Private Fields
-
 
 		#region Public Constructors
 
@@ -29,7 +27,6 @@ namespace RMDesktopUI.Library.Api
 		}
 
 		#endregion Public Constructors
-
 
 		#region Public Properties
 
@@ -42,7 +39,6 @@ namespace RMDesktopUI.Library.Api
 		}
 
 		#endregion Public Properties
-
 
 		#region Public Methods
 
@@ -96,7 +92,6 @@ namespace RMDesktopUI.Library.Api
 		}
 
 		#endregion Public Methods
-
 
 		#region Private Methods
 
