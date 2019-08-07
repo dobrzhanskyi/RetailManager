@@ -38,7 +38,7 @@ public static class PasswordBoxHelper
 		DependencyObject d,
 		DependencyPropertyChangedEventArgs e)
 	{
-		var box = d as PasswordBox;
+		PasswordBox box = d as PasswordBox;
 
 		if (box == null)
 		{

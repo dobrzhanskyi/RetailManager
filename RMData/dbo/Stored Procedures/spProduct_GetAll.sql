@@ -2,7 +2,7 @@
 
 AS
 begin
-	SELECT Id, ProductName, [Description], RetailPrice, QuantityInStock
+	SELECT Id, ProductName, [Description], RetailPrice, QuantityInStock,IsTaxable
 	FROM dbo.Product
 	ORDER BY ProductName;
 end
