@@ -15,15 +15,14 @@ namespace RMDesktopUI.ViewModels
 
 		#region Public Constructors
 
-		public ShellViewModel(IEventAggregator eventAggregator, SalesViewModel salesVM, SimpleContainer container)
+		public ShellViewModel(IEventAggregator eventAggregator, SalesViewModel salesVM)
 		{
 			_event = eventAggregator;
-			_salesVM = salesVM;
-			_container = container;
+			_salesVM = salesVM;		
 
 			_event.Subscribe(this);
 
-			ActivateItem(_container.GetInstance<LoginViewModel>());
+			ActivateItem(IoC.Get<LoginViewModel>());
 		}
 
 		#endregion Public Constructors
