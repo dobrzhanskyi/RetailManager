@@ -7,9 +7,8 @@ namespace RMDesktopUI.ViewModels
 	{
 		#region Private Fields
 
-		private IEventAggregator _event;
-		private SalesViewModel _salesVM;
-		private SimpleContainer _container;
+		private readonly IEventAggregator _event;
+		private readonly SalesViewModel _salesVM;
 
 		#endregion Private Fields
 
@@ -18,7 +17,7 @@ namespace RMDesktopUI.ViewModels
 		public ShellViewModel(IEventAggregator eventAggregator, SalesViewModel salesVM)
 		{
 			_event = eventAggregator;
-			_salesVM = salesVM;		
+			_salesVM = salesVM;
 
 			_event.Subscribe(this);
 

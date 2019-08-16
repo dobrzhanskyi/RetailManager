@@ -27,7 +27,8 @@ namespace RMDesktopUI
 		protected override void Configure()
 		{
 			_container.Instance(_container)
-				.PerRequest < IProductEndpoint, ProductEndpoint>();
+				.PerRequest<IProductEndpoint, ProductEndpoint>()
+				.PerRequest<ISaleEndpoint, SaleEndpoint>();
 
 			_container
 				.Singleton<IWindowManager, WindowManager>()
