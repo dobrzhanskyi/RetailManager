@@ -134,6 +134,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RMDataManager.Library\RMDataManager.Library.csproj">
+      <Project>{D6278DA1-43DA-4FE8-B6EB-1409520F7604}</Project>
+      <Name>RMDataManager.Library</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RMDesktopUI.Library\RMDesktopUI.Library.csproj">
       <Project>{1631275e-492a-44db-8568-c82dc0ac0e0c}</Project>
       <Name>RMDesktopUI.Library</Name>

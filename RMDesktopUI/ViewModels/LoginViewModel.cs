@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using RMDesktopUI.EventModels;
@@ -13,15 +12,15 @@ namespace RMDesktopUI.ViewModels
 
 		private readonly IAPIHelper _apiHelper;
 		private string _errorMessage;
-		private string _password;
-		private string _userName;
+		private string _password = "Test12.";
+		private string _userName = "test@test";
 		private IEventAggregator _eventAggregator;
 
 		#endregion Private Fields
 
 		#region Public Constructors
 
-		public LoginViewModel(IAPIHelper apiHelper,IEventAggregator eventAggregator)
+		public LoginViewModel(IAPIHelper apiHelper, IEventAggregator eventAggregator)
 		{
 			_apiHelper = apiHelper;
 			_eventAggregator = eventAggregator;

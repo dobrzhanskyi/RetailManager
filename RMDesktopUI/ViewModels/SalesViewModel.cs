@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
+//using RMDataManager.Library.Models;
 using RMDesktopUI.Library.Api;
 using RMDesktopUI.Library.Helpers;
 using RMDesktopUI.Library.Models;
@@ -14,6 +15,8 @@ namespace RMDesktopUI.ViewModels
 
 		private readonly IConfigHelper _configHelper;
 		private readonly IProductEndpoint _productEndpoint;
+		private readonly ISaleEndpoint _saleEndpoint;
+
 		private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
 		private int _itemQuantity = 1;
 		private BindingList<ProductModel> _products;
@@ -23,10 +26,11 @@ namespace RMDesktopUI.ViewModels
 
 		#region Public Constructors
 
-		public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper)
+		public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper,ISaleEndpoint saleEndpoint)
 		{
 			_productEndpoint = productEndpoint;
 			_configHelper = configHelper;
+			_saleEndpoint = saleEndpoint;
 		}
 
 		#endregion Public Constructors
@@ -62,7 +66,10 @@ namespace RMDesktopUI.ViewModels
 			get
 			{
 				bool output = false;
-				//TODO if something in the cart
+				if (Cart.Count > 0)
+				{
+					output = true;
+				}
 				return output;
 			}
 		}
@@ -200,10 +207,21 @@ namespace RMDesktopUI.ViewModels
 			NotifyOfPropertyChange(() => SubTotal);
 			NotifyOfPropertyChange(() => Tax);
 			NotifyOfPropertyChange(() => Total);
+			NotifyOfPropertyChange(() => CanCheckOut);
 		}
 
-		public void CheckOut()
+		public async Task CheckOut()
 		{
+			SaleModel sale = new SaleModel();
+			foreach (var item in Cart)
+			{
+				sale.SaleDetails.Add(new SaleDetailModel
+				{
+					ProductId = item.Product.Id,
+					Quantity = item.QuantityInCart
+				});
+			}
+			await _saleEndpoint.PostSale(sale);
 		}
 
 		public async Task LoadProducts()
@@ -217,6 +235,7 @@ namespace RMDesktopUI.ViewModels
 			NotifyOfPropertyChange(() => SubTotal);
 			NotifyOfPropertyChange(() => Tax);
 			NotifyOfPropertyChange(() => Total);
+			NotifyOfPropertyChange(() => CanCheckOut);
 		}
 
 		#endregion Public Methods
