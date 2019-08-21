@@ -1,11 +1,15 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Caliburn.Micro;
+
 //using RMDataManager.Library.Models;
 using RMDesktopUI.Library.Api;
 using RMDesktopUI.Library.Helpers;
 using RMDesktopUI.Library.Models;
+using RMDesktopUI.Models;
 
 namespace RMDesktopUI.ViewModels
 {
@@ -16,21 +20,23 @@ namespace RMDesktopUI.ViewModels
 		private readonly IConfigHelper _configHelper;
 		private readonly IProductEndpoint _productEndpoint;
 		private readonly ISaleEndpoint _saleEndpoint;
+		private readonly IMapper _mapper;
 
-		private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
+		private BindingList<CartItemDisplayModel> _cart = new BindingList<CartItemDisplayModel>();
 		private int _itemQuantity = 1;
-		private BindingList<ProductModel> _products;
-		private ProductModel _selectedProduct;
+		private BindingList<ProductDisplayModel> _products;
+		private ProductDisplayModel _selectedProduct;
 
 		#endregion Private Fields
 
 		#region Public Constructors
 
-		public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper,ISaleEndpoint saleEndpoint)
+		public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper, ISaleEndpoint saleEndpoint, IMapper mapper)
 		{
 			_productEndpoint = productEndpoint;
 			_configHelper = configHelper;
 			_saleEndpoint = saleEndpoint;
+			_mapper = mapper;
 		}
 
 		#endregion Public Constructors
@@ -84,7 +90,7 @@ namespace RMDesktopUI.ViewModels
 			}
 		}
 
-		public BindingList<CartItemModel> Cart
+		public BindingList<CartItemDisplayModel> Cart
 		{
 			get { return _cart; }
 			set
@@ -105,7 +111,7 @@ namespace RMDesktopUI.ViewModels
 			}
 		}
 
-		public BindingList<ProductModel> Products
+		public BindingList<Models.ProductDisplayModel> Products
 		{
 			get { return _products; }
 			set
@@ -115,7 +121,7 @@ namespace RMDesktopUI.ViewModels
 			}
 		}
 
-		public ProductModel SelectedProduct
+		public ProductDisplayModel SelectedProduct
 		{
 			get { return _selectedProduct; }
 			set
@@ -183,18 +189,15 @@ namespace RMDesktopUI.ViewModels
 
 		public void AddToCart()
 		{
-			CartItemModel existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
+			CartItemDisplayModel existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
 
 			if (existingItem != null)
 			{
 				existingItem.QuantityInCart += ItemQuantity;
-				//TODO Find a better way of refreshing
-				Cart.Remove(existingItem);
-				Cart.Add(existingItem);
 			}
 			else
 			{
-				CartItemModel item = new CartItemModel
+				CartItemDisplayModel item = new CartItemDisplayModel
 				{
 					Product = SelectedProduct,
 					QuantityInCart = ItemQuantity
@@ -227,7 +230,8 @@ namespace RMDesktopUI.ViewModels
 		public async Task LoadProducts()
 		{
 			var productList = await _productEndpoint.GetAll();
-			Products = new BindingList<ProductModel>(productList);
+			var products = _mapper.Map<List<ProductDisplayModel>>(productList);
+			Products = new BindingList<ProductDisplayModel>(products);
 		}
 
 		public void RemoveFromCart()
