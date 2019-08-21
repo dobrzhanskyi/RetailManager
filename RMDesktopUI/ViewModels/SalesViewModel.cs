@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Caliburn.Micro;
-
-//using RMDataManager.Library.Models;
 using RMDesktopUI.Library.Api;
 using RMDesktopUI.Library.Helpers;
 using RMDesktopUI.Library.Models;
@@ -26,6 +24,7 @@ namespace RMDesktopUI.ViewModels
 		private int _itemQuantity = 1;
 		private BindingList<ProductDisplayModel> _products;
 		private ProductDisplayModel _selectedProduct;
+		private CartItemDisplayModel _selectedCartItem;
 
 		#endregion Private Fields
 
@@ -85,7 +84,12 @@ namespace RMDesktopUI.ViewModels
 			get
 			{
 				bool output = false;
-				//TODO if something is selected
+
+				if (SelectedCartItem != null && SelectedCartItem?.Product.QuantityInStock > 0)
+				{
+					output = true;
+				}
+
 				return output;
 			}
 		}
@@ -97,6 +101,17 @@ namespace RMDesktopUI.ViewModels
 			{
 				_cart = value;
 				NotifyOfPropertyChange(() => Cart);
+			}
+		}
+
+		public CartItemDisplayModel SelectedCartItem
+		{
+			get { return _selectedCartItem; }
+			set
+			{
+				_selectedCartItem = value;
+				NotifyOfPropertyChange(() => SelectedCartItem);
+				NotifyOfPropertyChange(() => CanRemoveFromCart);
 			}
 		}
 
@@ -236,6 +251,16 @@ namespace RMDesktopUI.ViewModels
 
 		public void RemoveFromCart()
 		{
+			SelectedCartItem.Product.QuantityInStock += 1;
+
+			if (SelectedCartItem.QuantityInCart > 1)
+			{
+				SelectedCartItem.QuantityInCart -= 1;
+			}
+			else
+			{
+				Cart.Remove(SelectedCartItem);
+			}
 			NotifyOfPropertyChange(() => SubTotal);
 			NotifyOfPropertyChange(() => Tax);
 			NotifyOfPropertyChange(() => Total);
