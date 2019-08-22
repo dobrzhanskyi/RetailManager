@@ -85,7 +85,7 @@ namespace RMDesktopUI.ViewModels
 			{
 				bool output = false;
 
-				if (SelectedCartItem != null && SelectedCartItem?.Product.QuantityInStock > 0)
+				if (SelectedCartItem != null && SelectedCartItem?.QuantityInCart> 0)
 				{
 					output = true;
 				}
@@ -176,6 +176,18 @@ namespace RMDesktopUI.ViewModels
 
 		#region Private Methods
 
+		private async Task ResetSalesViewModel()
+		{
+			Cart = new BindingList<CartItemDisplayModel>();
+
+			await LoadProducts();
+
+			NotifyOfPropertyChange(() => SubTotal);
+			NotifyOfPropertyChange(() => Tax);
+			NotifyOfPropertyChange(() => Total);
+			NotifyOfPropertyChange(() => CanCheckOut);
+			NotifyOfPropertyChange(() => CanAddToCart);
+		}
 		private decimal CalculateSubTotal()
 		{
 			decimal subTotal = 0;
@@ -240,6 +252,8 @@ namespace RMDesktopUI.ViewModels
 				});
 			}
 			await _saleEndpoint.PostSale(sale);
+
+			await ResetSalesViewModel();
 		}
 
 		public async Task LoadProducts()
@@ -265,6 +279,7 @@ namespace RMDesktopUI.ViewModels
 			NotifyOfPropertyChange(() => Tax);
 			NotifyOfPropertyChange(() => Total);
 			NotifyOfPropertyChange(() => CanCheckOut);
+			NotifyOfPropertyChange(() => CanAddToCart);
 		}
 
 		#endregion Public Methods
