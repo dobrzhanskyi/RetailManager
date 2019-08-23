@@ -12,6 +12,6 @@ namespace RMDesktopUI.Library.Api
 
 		Task GetLoggedInUserInfo(string token);
 
-		void LogOffUser()
+		void LogOffUser();
 	}
 }
