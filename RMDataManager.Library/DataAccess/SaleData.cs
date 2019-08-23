@@ -50,14 +50,18 @@ namespace RMDataManager.Library.DataAccess
 
 			sale.Total = sale.SubTotal + sale.Tax;
 			//Save the sale model
-			SqlDataAccess sql = new SqlDataAccess();
-			sql.SaveData("dbo.spSale_Insert", sale, "RMData");
-			sale.Id = sql.LoadData<int, dynamic>("spSale_Lookup", new { sale.CashierId, sale.SaleDate }, "RMData").FirstOrDefault();
-
-			foreach (var item in details)
+			using (SqlDataAccess sql = new SqlDataAccess())
 			{
-				item.SaleId = sale.Id;
-				sql.SaveData("dbo.spSaleDetail_Insert", item, "RMData");
+				sql.StartTransaction("RMData");
+				sql.SaveDataInTransaction("dbo.spSale_Insert", sale);
+
+				sale.Id = sql.LoadDataInTransaction<int, dynamic>("spSale_Lookup", new { sale.CashierId, sale.SaleDate }).FirstOrDefault();
+
+				foreach (var item in details)
+				{
+					item.SaleId = sale.Id;
+					sql.SaveDataInTransaction("dbo.spSaleDetail_Insert", item);
+				}
 			}
 		}
 	}
