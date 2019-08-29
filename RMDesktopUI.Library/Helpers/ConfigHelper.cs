@@ -4,7 +4,6 @@ namespace RMDesktopUI.Library.Helpers
 {
 	public class ConfigHelper : IConfigHelper
 	{
-		//TODO Move from config to the API
 		public decimal GetTaxRate()
 		{
 			string rateText = ConfigurationManager.AppSettings["taxRate"];
