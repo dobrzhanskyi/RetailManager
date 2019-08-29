@@ -7,7 +7,6 @@ namespace RMDataManager.Library.DataAccess
 {
 	public class SaleData
 	{
-		//TODO: Make this Solid/DRY better
 		public void SaveSale(SaleModel saleInfo, string cashierId)
 		{
 			List<SaleDetailDBModel> details = new List<SaleDetailDBModel>();
@@ -40,7 +39,6 @@ namespace RMDataManager.Library.DataAccess
 				details.Add(detail);
 			}
 
-			//Create the Sale model
 			SaleDBModel sale = new SaleDBModel
 			{
 				SubTotal = details.Sum(x => x.PurchasePrice),
@@ -49,7 +47,7 @@ namespace RMDataManager.Library.DataAccess
 			};
 
 			sale.Total = sale.SubTotal + sale.Tax;
-			//Save the sale model
+
 			using (SqlDataAccess sql = new SqlDataAccess())
 			{
 				sql.StartTransaction("RMData");
