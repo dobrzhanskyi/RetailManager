@@ -6,9 +6,10 @@ using RMDataManager.Library.Models;
 
 namespace RMDataManager.Controllers
 {
-	//[Authorize]
+	[Authorize]
 	public class SaleController : ApiController
 	{
+		[Authorize(Roles = "Manager,Admin")]
 		[Route("GetSalesReport")]
 		public List<SaleReportModel> GetSalesReport()
 		{
@@ -16,6 +17,7 @@ namespace RMDataManager.Controllers
 			return data.GetSaleReport();
 		}
 
+		[Authorize(Roles = "Cashier")]
 		public void Post(SaleModel sale)
 		{
 			SaleData data = new SaleData();
