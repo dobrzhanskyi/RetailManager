@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using AutoMapper;
 using Caliburn.Micro;
 using RMDesktopUI.Library.Api;
@@ -25,17 +27,21 @@ namespace RMDesktopUI.ViewModels
 		private BindingList<ProductDisplayModel> _products;
 		private ProductDisplayModel _selectedProduct;
 		private CartItemDisplayModel _selectedCartItem;
+		private StatusInfoViewModel _status;
+		private readonly IWindowManager _window;
 
 		#endregion Private Fields
 
 		#region Public Constructors
 
-		public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper, ISaleEndpoint saleEndpoint, IMapper mapper)
+		public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper, ISaleEndpoint saleEndpoint, IMapper mapper, StatusInfoViewModel status, IWindowManager window)
 		{
 			_productEndpoint = productEndpoint;
 			_configHelper = configHelper;
 			_saleEndpoint = saleEndpoint;
 			_mapper = mapper;
+			_status = status;
+			_window = window;
 		}
 
 		#endregion Public Constructors
@@ -45,7 +51,30 @@ namespace RMDesktopUI.ViewModels
 		protected override async void OnViewLoaded(object view)
 		{
 			base.OnViewLoaded(view);
-			await LoadProducts();
+			try
+			{
+				await LoadProducts();
+			}
+			catch (System.Exception ex)
+			{
+				dynamic settings = new ExpandoObject();
+				settings.WindowStartUpLocation = WindowStartupLocation.CenterOwner;
+				settings.ResizeMode = ResizeMode.NoResize;
+				settings.Title = "System Error";
+
+				if (ex.Message == "Unauthorized")
+				{
+					_status.UpdateMessage("Unauthorized Access", "You don't have permissions to interact SalesView Form");
+					_window.ShowDialog(_status, null, settings);
+				}
+				else
+				{
+					_status.UpdateMessage("Fatal Exceprion", ex.Message);
+					_window.ShowDialog(_status, null, settings);
+				}
+
+				TryClose();
+			}
 		}
 
 		#endregion Protected Methods
@@ -85,7 +114,7 @@ namespace RMDesktopUI.ViewModels
 			{
 				bool output = false;
 
-				if (SelectedCartItem != null && SelectedCartItem?.QuantityInCart> 0)
+				if (SelectedCartItem != null && SelectedCartItem?.QuantityInCart > 0)
 				{
 					output = true;
 				}
@@ -188,6 +217,7 @@ namespace RMDesktopUI.ViewModels
 			NotifyOfPropertyChange(() => CanCheckOut);
 			NotifyOfPropertyChange(() => CanAddToCart);
 		}
+
 		private decimal CalculateSubTotal()
 		{
 			decimal subTotal = 0;
@@ -243,6 +273,7 @@ namespace RMDesktopUI.ViewModels
 		public async Task CheckOut()
 		{
 			SaleModel sale = new SaleModel();
+
 			foreach (var item in Cart)
 			{
 				sale.SaleDetails.Add(new SaleDetailModel
@@ -251,6 +282,7 @@ namespace RMDesktopUI.ViewModels
 					Quantity = item.QuantityInCart
 				});
 			}
+
 			await _saleEndpoint.PostSale(sale);
 
 			await ResetSalesViewModel();
