@@ -5,7 +5,7 @@ using RMDataManager.Library.Models;
 
 namespace RMDataManager.Controllers
 {
-	[Authorize(Roles = "Cashier")]
+	[Authorize(Roles = "Cashier,Admin")]
 	public class ProductController : ApiController
 	{
 		public List<ProductModel> Get()
