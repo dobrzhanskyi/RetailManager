@@ -25,7 +25,7 @@ namespace RMDesktopUI.ViewModels
 			set
 			{
 				_users = value;
-				NotifyOfPropertyChange(() => Users); ;
+				NotifyOfPropertyChange(() => Users);
 			}
 		}
 
